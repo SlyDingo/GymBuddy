@@ -1,0 +1,25 @@
+{
+    "Squat": {
+        "category": "Lower-Body",
+        "variations": [
+            "Bodyweight",
+            "Barbell",
+            "Dumbbell"
+        ]
+    },
+    "Push-Up": {
+        "category": "Upper-Body",
+        "variations": [
+            "Barbell",
+            "Dumbbell"
+        ]
+    },
+    "Jumping Jack": {
+        "category": "Lower-Body",
+        "variations": [
+            "Bodyweight",
+            "Barbell",
+            "Dumbbell"
+        ]
+    }
+}
