@@ -1,18 +1,14 @@
 import os
 
-def get_storage_path():
+def get_storage_path() -> str:
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "storage"))
 
-def get_file_path_in_storage(filename, create_if_not_exists=True):
+def get_file_path_in_storage(filename, create_if_not_exists=True) -> str:
     """
     Get the absolute path to a file in the storage directory
-    
-    param
-
-    filename: The name of the file to retrieve
-
-    create_if_not_exists: If True, the directory will be created if it does not exist.
-                          
+    Args:
+        filename (str): The name of the file to retrieve
+        create_if_not_exists (bool): If True, the directory will be created if it does not exist.                    
                           If False, an exception will be raised if the directory does not exist.
     """
     storage_dir = get_storage_path()
