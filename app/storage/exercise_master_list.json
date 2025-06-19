@@ -1,0 +1,10 @@
+{
+    "exerciseId": "eo12345",
+    "name": "Squat",
+    "category": "Lower Body",
+    "variations": [
+        "Bodyweight",
+        "Barbell",
+        "Dumbbell"
+    ]
+}
