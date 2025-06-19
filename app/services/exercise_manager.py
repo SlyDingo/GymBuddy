@@ -4,12 +4,9 @@ import os
 from storage import storage_manager
 
 # get the absolute path to the storage directory and then create the exercise_master_list file
-storage_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "storage"))
+exercise_master_list = storage_manager.get_file_path_in_storage("exercise_master_list.json", create_if_not_exists=True)
 
-print(f"Storage directory: {storage_dir}")
-os.makedirs(storage_dir, exist_ok=True)
-exercise_master_list = os.path.join(storage_dir, "exercise_master_list.json")
-
+# Get all the existing exericises;
 def add_exercise(exerciseID:str, name:str, category:str, variations:list):
     exerciseObject = {
         "exerciseId": exerciseID,
