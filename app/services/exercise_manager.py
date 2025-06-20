@@ -35,3 +35,17 @@ def add_exercise(exerciseID:str, category:str, variations:list[str]) -> None:
 
     with open(exercise_list_json_file_path, "w") as file: # write the JSON object to the file
         file.write(json_object)
+
+# Return Dictionary of all exercises
+def get_exercise_dictionary() -> dict:
+    """Retrieve the dictionary of all exercises from the exercise list JSON file.
+    Returns:
+        exercise_dict (dict): Dictionary containing all exercises with their details.
+    """
+    with open(exercise_list_json_file_path, "r") as file:
+        try:
+            exercise_dict = json.load(file)
+        except json.JSONDecodeError:
+            exercise_dict = {}
+    
+    return exercise_dict;
