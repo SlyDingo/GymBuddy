@@ -3,7 +3,7 @@ import os
 def get_storage_path() -> str:
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "storage"))
 
-def get_file_path_in_storage(filename, create_if_not_exists=True) -> str:
+def get_file_path_in_storage(filename, create_if_not_exists=True) -> str:                   
     """
     Get the absolute path to a file in the storage directory
     Args:
