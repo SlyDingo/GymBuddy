@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS exercise_log (
         exercise_id TEXT NOT NULL,
         category TEXT NOT NULL,
         variation TEXT NOT NULL,
-        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        date_unix INTEGER NOT NULL
 )
 ''')
 
@@ -57,7 +57,6 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
     }
 
     # Check if the file exists and read existing data
-    print("DATA")
     with open(exercise_list_json_file_path, "r") as file:
         try:
             existing_json_data = json.load(file)
@@ -87,8 +86,17 @@ def get_exercise_dictionary() -> dict:
     
     return exercise_dict;
 
-def log_exercise() -> None:
+def log_exercise(exerciseID:str, variation:str, set_map:dict) -> None:
+    current_exercise_dict = get_exercise_dictionary()
+    if exerciseID not in current_exercise_dict:
+        raise ValueError(f"Exercise ID '{exerciseID}' does not exist in the exercise dictionary. Add it.")
+    if variation not in current_exercise_dict[exerciseID]["variations"]:
+        raise ValueError(f"Variation '{variation}' does not exist for exercise ID '{exerciseID}'. Add it.")
+    
     conn = sqlite3.connect(exercise_log_database_file_path)
     cursor = conn.cursor()
-
+    cursor.execute('''
+    INSERT INTO exercise_log (exercise_id, category, variation, date_unix)
+    VALUES (?, ?, ?, ?)
+    ''', (exerciseID, get_exercise_dictionary()[exerciseID]["category"], variation))
     conn.close()
