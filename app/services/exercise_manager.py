@@ -7,18 +7,19 @@ from storage import storage_manager
 
 # get the absolute path to the storage directory and then create the exercise_master_list file
 exercise_list_json_file_path = storage_manager.get_file_path_in_storage("exercise_list.json", create_if_not_exists=True)
+exercise_log_database_file_path = os.path.join(storage_manager.get_storage_path(), "exercise_log.db")
 
 # get the absolute path to the storage directory and then create the exercise_log file
-log_database = sqlite3.connect(os.path.join(storage_manager.get_storage_path(), "exercise_log.db"));
+log_database = sqlite3.connect(exercise_log_database_file_path);
 sql_cursor = log_database.cursor()
 
 sql_cursor.execute('''
 CREATE TABLE IF NOT EXISTS exercise_log (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    exercise_id TEXT NOT NULL,
-    category TEXT NOT NULL,
-    variation TEXT NOT NULL,
-    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        exercise_id TEXT NOT NULL,
+        category TEXT NOT NULL,
+        variation TEXT NOT NULL,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 ''')
 
@@ -26,7 +27,7 @@ log_database.commit()  # Commit the changes to the database
 
 sql_cursor.execute("""
 CREATE TABLE IF NOT EXISTS set_log (
-                  id INTEGER PRIMARY KEY AUTOINCREMENT),
+                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                   exercise_log_id INTEGER NOT NULL,
                   set_count INTEGER NOT NULL,
                   rep_count INTEGER NOT NULL,
@@ -34,10 +35,11 @@ CREATE TABLE IF NOT EXISTS set_log (
                   is_warmup INTEGER DEFAULT 0,
                   rest_time INTEGER DEFAULT 0,
                   FOREIGN KEY (exercise_log_id) REFERENCES exercise_log (id) ON DELETE CASCADE
-                   
+                   )
 """)
 
 log_database.commit()  # Commit the changes to the database
+log_database.close()  # Close the database connection
 
 # Get all the existing exericises;
 def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> None:
@@ -48,17 +50,19 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
         variations (list): List of variations for the exercise.
     """
     exerciseObject = {
-        exerciseID : {
+        exerciseID.lower() : {
           "category": category,
           "variations": variations
         }
     }
 
     # Check if the file exists and read existing data
+    print("DATA")
     with open(exercise_list_json_file_path, "r") as file:
         try:
             existing_json_data = json.load(file)
         except json.JSONDecodeError:
+            print("JSON file is empty or corrupted. Initializing with an empty dictionary.")
             existing_json_data = {}
     
     # append the new exercise object to the existing data
@@ -84,4 +88,7 @@ def get_exercise_dictionary() -> dict:
     return exercise_dict;
 
 def log_exercise() -> None:
-    pass
+    conn = sqlite3.connect(exercise_log_database_file_path)
+    cursor = conn.cursor()
+
+    conn.close()

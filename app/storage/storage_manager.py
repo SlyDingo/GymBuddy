@@ -13,9 +13,11 @@ def get_file_path_in_storage(filename, create_if_not_exists=True) -> str:
     """
     storage_dir = get_storage_path()
 
+    filename_path = os.path.join(storage_dir, filename)
+
      # Ensure the storage directory exists and just create the file if it does not exist
-    if create_if_not_exists:
-        with open(os.path.join(storage_dir, filename), 'w') as f:
+    if create_if_not_exists and not os.path.exists(filename_path):
+        with open(filename_path, 'w') as f:
             pass
 
     # Ensure the storage directory exists and if not raise an exception
