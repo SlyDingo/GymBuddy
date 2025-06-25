@@ -12,6 +12,33 @@ exercise_list_json_file_path = storage_manager.get_file_path_in_storage("exercis
 log_database = sqlite3.connect(os.path.join(storage_manager.get_storage_path(), "exercise_log.db"));
 sql_cursor = log_database.cursor()
 
+sql_cursor.execute('''
+CREATE TABLE IF NOT EXISTS exercise_log (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    exercise_id TEXT NOT NULL,
+    category TEXT NOT NULL,
+    variation TEXT NOT NULL,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+''')
+
+log_database.commit()  # Commit the changes to the database
+
+sql_cursor.execute("""
+CREATE TABLE IF NOT EXISTS set_log (
+                  id INTEGER PRIMARY KEY AUTOINCREMENT),
+                  exercise_log_id INTEGER NOT NULL,
+                  set_count INTEGER NOT NULL,
+                  rep_count INTEGER NOT NULL,
+                  weight REAL NOT NULL,
+                  is_warmup INTEGER DEFAULT 0,
+                  rest_time INTEGER DEFAULT 0,
+                  FOREIGN KEY (exercise_log_id) REFERENCES exercise_log (id) ON DELETE CASCADE
+                   
+""")
+
+log_database.commit()  # Commit the changes to the database
+
 # Get all the existing exericises;
 def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> None:
     """Add a new exercise to the exercise list JSON file.
