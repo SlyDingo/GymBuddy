@@ -57,6 +57,8 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
         }
     }
 
+    exerciseObect = Exercise(exerciseID, variations, category)
+
     # Check if the file exists and read existing data
     with open(exercise_list_json_file_path, "r") as file:
         try:
