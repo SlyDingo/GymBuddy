@@ -3,6 +3,7 @@ import os
 import sqlite3
 
 from storage import storage_manager
+from exercise import Exercise
 
 
 # get the absolute path to the storage directory and then create the exercise_master_list file
