@@ -50,14 +50,8 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
         category (str): Category of the exercise (e.g., "Upper-Body", "Lower-Body").
         variations (list): List of variations for the exercise.
     """
-    exerciseObject = {
-        exerciseID.lower() : {
-          "category": category,
-          "variations": variations
-        }
-    }
-
-    exerciseObect = Exercise(exerciseID, variations, category)
+    
+    exerciseObject = Exercise(exerciseID, variations, category)
 
     # Check if the file exists and read existing data
     with open(exercise_list_json_file_path, "r") as file:
@@ -68,7 +62,7 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
             existing_json_data = {}
     
     # append the new exercise object to the existing data
-    existing_json_data.update(exerciseObject)
+    existing_json_data.update(exerciseObject.to_dict(flat=False))
 
     json_object = json.dumps(existing_json_data, indent=4) # convert object to JSON object
 
@@ -76,30 +70,27 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
         file.write(json_object)
 
 # Return Dictionary of all exercises
-def get_exercise_dictionary() -> dict:
-    """Retrieve the dictionary of all exercises from the exercise list JSON file.
-    Returns:
-        exercise_dict (dict): Dictionary containing all exercises with their details.
-    """
+def load_exercise() -> list[Exercise]:
+    """Load all exercises from the exercise list JSON file."""
     with open(exercise_list_json_file_path, "r") as file:
         try:
             exercise_dict = json.load(file)
         except json.JSONDecodeError:
             exercise_dict = {}
     
-    return exercise_dict;
+    return [Exercise(exerciseID, value["variations"], value["category"]) for exerciseID, value in exercise_dict.items()]
 
-def log_exercise(exerciseID:str, variation:str, set_map:dict) -> None:
-    current_exercise_dict = get_exercise_dictionary()
-    if exerciseID not in current_exercise_dict:
-        raise ValueError(f"Exercise ID '{exerciseID}' does not exist in the exercise dictionary. Add it.")
-    if variation not in current_exercise_dict[exerciseID]["variations"]:
-        raise ValueError(f"Variation '{variation}' does not exist for exercise ID '{exerciseID}'. Add it.")
+# def log_exercise(exerciseID:str, variation:str, set_map:dict) -> None:
+#     current_exercise_dict = get_exercise_dictionary()
+#     if exerciseID not in current_exercise_dict:
+#         raise ValueError(f"Exercise ID '{exerciseID}' does not exist in the exercise dictionary. Add it.")
+#     if variation not in current_exercise_dict[exerciseID]["variations"]:
+#         raise ValueError(f"Variation '{variation}' does not exist for exercise ID '{exerciseID}'. Add it.")
     
-    conn = sqlite3.connect(exercise_log_database_file_path)
-    cursor = conn.cursor()
-    cursor.execute('''
-    INSERT INTO exercise_log (exercise_id, category, variation, date_unix)
-    VALUES (?, ?, ?, ?)
-    ''', (exerciseID, get_exercise_dictionary()[exerciseID]["category"], variation))
-    conn.close()
+#     conn = sqlite3.connect(exercise_log_database_file_path)
+#     cursor = conn.cursor()
+#     cursor.execute('''
+#     INSERT INTO exercise_log (exercise_id, category, variation, date_unix)
+#     VALUES (?, ?, ?, ?)
+#     ''', (exerciseID, get_exercise_dictionary()[exerciseID]["category"], variation))
+#     conn.close()
