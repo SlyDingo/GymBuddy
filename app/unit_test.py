@@ -3,13 +3,9 @@ from unittest.mock import patch
 import tempfile
 import os
 import json
-# import os
-# import tempfile
-# from unittest.mock import patch
 
 from services import exercise_manager
 from storage import storage_manager
-# from services.exercise import Exercise
 
 join_path = os.path.join
 class TestExerciseManager(unittest.TestCase):
