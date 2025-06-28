@@ -3,9 +3,11 @@
 
 class Exercise():
     def __init__(self, exerciseID: str, variation: list[str], category:str) -> None:
-        self.exerciseID = exerciseID
-        self.variation = variation;
-        self.category = category;
+        self.name = exerciseID
+        self.exerciseID = exerciseID.lower()
+        # self.name = exerciseID
+        self.variation = [item.lower() for item in variation];
+        self.category = category.lower();
 
     def to_dict(self, flat=True) -> dict:
         """Convert the Exercise object to a dictionary."""

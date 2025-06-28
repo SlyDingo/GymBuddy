@@ -3,7 +3,7 @@ import os
 def get_storage_path() -> str:
     return os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "storage"))
 
-def get_file_path_in_storage(filename, create_if_not_exists=True) -> str:                   
+def get_file_path_in_storage(filename:str, create_if_not_exists=True) -> str:                   
     """
     Get the absolute path to a file in the storage directory
     Args:
@@ -25,3 +25,12 @@ def get_file_path_in_storage(filename, create_if_not_exists=True) -> str:
         Exception(f"Storage directory '{storage_dir}' does not exist")
 
     return os.path.join(storage_dir, filename)
+
+def ensure_file_exists(filepath:str, new_file_content:str) -> None:
+    """Ensure the file exists. If not, create it with the given content."""
+    if not os.path.exists(filepath):
+        # Create the directory if it does not exist
+        os.makedirs(os.path.dirname(filepath), exist_ok=True)
+
+        with open(filepath, 'w') as file:
+            file.write(new_file_content)

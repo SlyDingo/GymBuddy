@@ -1,18 +1,9 @@
 {
-    "jumping jack": {
-        "category": "Lower-Body",
-        "variations": [
-            "Bodyweight",
-            "Barbell",
-            "Dumbbell"
-        ]
-    },
-    "Jumping Jack": {
+    "bench press": {
         "variation": [
-            "Bodyweight",
-            "Barbell",
-            "Dumbbell"
+            "barbell",
+            "dumbell"
         ],
-        "category": "Lower-Body"
+        "category": "upper body"
     }
 }

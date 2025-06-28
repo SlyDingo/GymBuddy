@@ -43,7 +43,7 @@ log_database.commit()  # Commit the changes to the database
 log_database.close()  # Close the database connection
 
 # Get all the existing exericises;
-def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> None:
+def add_exercise_type(exerciseID:str, variations:list[str], category:str) -> None:
     """Add a new exercise to the exercise list JSON file.
     Args:
         exerciseID (str): Unique identifier for the exercise.
@@ -54,6 +54,7 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
     exerciseObject = Exercise(exerciseID, variations, category)
 
     # Check if the file exists and read existing data
+    storage_manager.ensure_file_exists(exercise_list_json_file_path, "{}")
     with open(exercise_list_json_file_path, "r") as file:
         try:
             existing_json_data = json.load(file)
@@ -70,7 +71,7 @@ def add_exercise_type(exerciseID:str, category:str, variations:list[str]) -> Non
         file.write(json_object)
 
 # Return Dictionary of all exercises
-def load_exercise() -> list[Exercise]:
+def load_exercise_list() -> list[Exercise]:
     """Load all exercises from the exercise list JSON file."""
     with open(exercise_list_json_file_path, "r") as file:
         try:
@@ -78,7 +79,20 @@ def load_exercise() -> list[Exercise]:
         except json.JSONDecodeError:
             exercise_dict = {}
     
-    return [Exercise(exerciseID, value["variations"], value["category"]) for exerciseID, value in exercise_dict.items()]
+    return [Exercise(exerciseID, value["variation"], value["category"]) for exerciseID, value in exercise_dict.items()]
+
+def get_exercise_object(object_to_get:str) -> Exercise:
+    """Checks if an type::Exercise exists in the JSON master list.
+    If exists returns that object"""
+    list_of_exercise = load_exercise_list()
+    object_to_get = object_to_get.lower()
+
+    for item in list_of_exercise:
+        if (item.name == object_to_get) or (item.exerciseID == object_to_get):
+            return item
+    
+    return Exercise("", [], "")
+    
 
 # def log_exercise(exerciseID:str, variation:str, set_map:dict) -> None:
 #     current_exercise_dict = get_exercise_dictionary()
