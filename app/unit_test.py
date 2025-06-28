@@ -8,6 +8,7 @@ import json
 # from unittest.mock import patch
 
 from services import exercise_manager
+from storage import storage_manager
 # from services.exercise import Exercise
 
 join_path = os.path.join
@@ -38,6 +39,11 @@ class TestExerciseManager(unittest.TestCase):
         self.temp_dir.cleanup()
     
     #### TESTS ####
+    def test_path_in_storage_creates_if_not_exists(self):
+        self.assertFalse(os.path.exists(self.temp_exercise_list_json))
+        exercise_manager.storage_manager.ensure_file_exists(self.temp_exercise_list_json, "{}")
+        self.assertTrue(os.path.exists(self.temp_exercise_list_json))
+
     def test_added_exercise_exists_in_json(self):
         exercise_manager.add_exercise_type(exerciseID="Bench Press", category="Upper Body", variations=["Barbell", "Dumbell"])
 
