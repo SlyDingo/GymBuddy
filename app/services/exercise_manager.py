@@ -3,12 +3,12 @@ import os
 import sqlite3
 
 from storage import storage_manager
-from .exercise import Exercise
+from .exercise import Exercise, SetMap
 
 
 # get the absolute path to the storage directory and then create the exercise_master_list file
 exercise_list_json_file_path = storage_manager.get_file_path_in_storage("exercise_list.json", create_if_not_exists=True)
-exercise_log_database_file_path = os.path.join(storage_manager.get_storage_path(), "exercise_log.db")
+exercise_log_database_file_path = storage_manager.get_file_path_in_storage("exercise_log.db", create_if_not_exists=True)
 
 # get the absolute path to the storage directory and then create the exercise_log file
 log_database = sqlite3.connect(exercise_log_database_file_path);
@@ -93,6 +93,17 @@ def get_exercise_object(object_to_get:str) -> Exercise:
     
     return Exercise("", [], "")
     
+def log_exerise(exerciseObject:Exercise, setMap:SetMap) -> None:
+    conn = sqlite3.connect(exercise_log_database_file_path)
+    cursor = conn.cursor()
+
+    cursor.execute("""
+    INSERT INTO exercise_log (exercise_id, category, variation, date_unix)
+    VALUES (?, ?, ?, ?)
+    """, (exerciseObject.exerciseID, exerciseObject.category, exerciseObject.variation[0], 123))
+
+    conn.commit()
+    conn.close()
 
 # def log_exercise(exerciseID:str, variation:str, set_map:dict) -> None:
 #     current_exercise_dict = get_exercise_dictionary()
