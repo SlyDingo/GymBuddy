@@ -2,12 +2,16 @@
 # add __Str__ method to Exercise class
 
 class Exercise():
+    registiry = {} # Tracks all instances of the exercise
+
     def __init__(self, exerciseID: str, variation: list[str], category:str) -> None:
         self.name = exerciseID
         self.exerciseID = exerciseID.lower()
         # self.name = exerciseID
         self.variation = [item.lower() for item in variation];
         self.category = category.lower();
+
+        Exercise.registiry[self.exerciseID] = self  # adds a strong reference
 
     def to_dict(self, flat=True) -> dict:
         """Convert the Exercise object to a dictionary."""
@@ -25,6 +29,31 @@ class Exercise():
             "category": self.category
         }
 
+    @classmethod
+    def exists(cls, exerciseID_to_check:str) -> bool:
+        """Check to see if the exercise Objects exists """
+        for name in cls.registiry:
+            if (exerciseID_to_check.lower() == name):
+                return True
+
+        return False
+    
+    @classmethod
+    def remove(cls, exerciseID_to_remove) -> None:
+        """Removes an instance of Exercise from the registry"""
+        cls.registiry.pop(exerciseID_to_remove.lower())
+    
+    @classmethod
+    def _to_dict(cls, flat=True) -> dict:
+        dict_to_return = {}
+        for exercise in cls.registiry:
+            dict_to_return.update(exercise.to_dict(flat=False))
+        
+        return dict_to_return
+    
+    # @classmethod
+    # def add(cls, exercise) -> None:
+    #     cls.registiry[exercise.exerciseID] = exercise
 
 class SetMap():
     """Store the Workout data for a specific workout"""
@@ -42,3 +71,14 @@ class SetMap():
         })
 
         self.total_sets += 1
+
+class ExerciseLog(SetMap):
+    def __init__(self, exerciseID:str, variation:str, category:str) -> None:
+        super().__init__()
+        self.exerciseID = exerciseID.lower()
+        self.variation = variation
+        self.category = category
+
+        # Check if Exercise exists in all existing Exercises
+        if not Exercise.exists(self.exerciseID):
+            raise ValueError("Exercie does not exist")

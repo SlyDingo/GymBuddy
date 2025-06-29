@@ -3,7 +3,7 @@ import os
 import sqlite3
 
 from storage import storage_manager
-from .exercise import Exercise, SetMap
+from .exercise import *
 
 
 # get the absolute path to the storage directory and then create the exercise_master_list file
@@ -14,7 +14,7 @@ def ensure_integrity_of_database() -> None:
     # get the absolute path to the storage directory and then create the exercise_log file
     log_database = sqlite3.connect(exercise_log_database_file_path);
     sql_cursor = log_database.cursor()
-    
+
     sql_cursor.execute('''
     CREATE TABLE IF NOT EXISTS exercise_log (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -107,17 +107,3 @@ def log_exercise(exerciseObject:Exercise, setMap:SetMap) -> None:
     conn.commit()
     conn.close()
 
-# def log_exercise(exerciseID:str, variation:str, set_map:dict) -> None:
-#     current_exercise_dict = get_exercise_dictionary()
-#     if exerciseID not in current_exercise_dict:
-#         raise ValueError(f"Exercise ID '{exerciseID}' does not exist in the exercise dictionary. Add it.")
-#     if variation not in current_exercise_dict[exerciseID]["variations"]:
-#         raise ValueError(f"Variation '{variation}' does not exist for exercise ID '{exerciseID}'. Add it.")
-    
-#     conn = sqlite3.connect(exercise_log_database_file_path)
-#     cursor = conn.cursor()
-#     cursor.execute('''
-#     INSERT INTO exercise_log (exercise_id, category, variation, date_unix)
-#     VALUES (?, ?, ?, ?)
-#     ''', (exerciseID, get_exercise_dictionary()[exerciseID]["category"], variation))
-#     conn.close()

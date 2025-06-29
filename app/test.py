@@ -10,23 +10,25 @@ from services.exercise import Exercise, SetMap
 from storage import storage_manager
 
 if __name__ == "__main__":
-    path = storage_manager.get_file_path_in_storage("exercise_log.db", False)
-    conn = sqlite3.connect(path)
-    cursor = conn.cursor()
+    pass
+    
+    # path = storage_manager.get_file_path_in_storage("exercise_log.db", False)
+    # conn = sqlite3.connect(path)
+    # cursor = conn.cursor()
 
-    exerciseObject = Exercise("bench press", ["barbell"], "upper body")
-    set = SetMap()
-    set.add_set(6, 10, 0)
-    exercise_manager.log_exerise(exerciseObject, set)
+    # exerciseObject = Exercise("bench press", ["barbell"], "upper body")
+    # set = SetMap()
+    # set.add_set(6, 10, 0)
+    # exercise_manager.log_exerise(exerciseObject, set)
 
-    cursor.execute("""
-    SELECT * FROM exercise_log
-    """)
+    # cursor.execute("""
+    # SELECT * FROM exercise_log
+    # """)
 
-    print(cursor.fetchone())
+    # print(cursor.fetchone())
 
-    cursor.close()
-    conn.close()
+    # cursor.close()
+    # conn.close()
 
     # exerciseObject = Exercise("bench press", ["barbell"], "upper body")
     # set = SetMap()
