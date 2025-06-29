@@ -3,9 +3,11 @@ from unittest.mock import patch
 import tempfile
 import os
 import json
+import sqlite3
 
 from services import exercise_manager
 from storage import storage_manager
+from services.exercise import Exercise, SetMap
 
 join_path = os.path.join
 class TestExerciseManager(unittest.TestCase):
@@ -56,6 +58,26 @@ class TestExerciseManager(unittest.TestCase):
         self.assertEqual(item_to_check.exerciseID, "bench press")
         self.assertEqual(item_to_check.category, "upper body")
         self.assertEqual(item_to_check.variation, ["barbell", "dumbell"])
+    
+    def test_logging_exercise_into_database(self):
+        exercise_manager.ensure_integrity_of_database()
+        exerciseObject = Exercise("bench press", ["barbell"], "upper body")
+        set = SetMap()
+        set.add_set(6, 10, 0)
+        exercise_manager.log_exercise(exerciseObject, set)
+
+        conn = sqlite3.connect(self.temp_exersice_log_db)
+        cursor = conn.cursor()
+
+        cursor.execute("""
+        SELECT * FROM exercise_log
+        """)
+
+        self.assertEqual(cursor.fetchone(), (1, 'bench press', 'upper body', 'barbell', 123))
+
+        cursor.close()
+        conn.close()
+
 
 
 if __name__ == "__main__":
