@@ -43,7 +43,7 @@ def ensure_integrity_of_database() -> None:
     log_database.commit()  # Commit the changes to the database
     log_database.close()  # Close the database connection
 
-ensure_integrity_of_database()
+storage_manager.init_db("exerise", exercise_log_database_file_path)
 # Get all the existing exericises;
 def add_exercise_type(exerciseID:str, variations:list[str], category:str) -> None:
     """Add a new exercise to the exercise list JSON file.

@@ -60,7 +60,7 @@ class TestExerciseManager(unittest.TestCase):
         self.assertEqual(item_to_check.variation, ["barbell", "dumbell"])
     
     def test_logging_exercise_into_database(self):
-        exercise_manager.ensure_integrity_of_database()
+        storage_manager.init_db("Exercise", exercise_manager.exercise_log_database_file_path)
         exerciseObject = Exercise("bench press", ["barbell"], "upper body")
         set = SetMap()
         set.add_set(6, 10, 0)
