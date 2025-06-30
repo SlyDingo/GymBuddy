@@ -52,6 +52,20 @@ class TestExerciseManager(unittest.TestCase):
         self.assertEqual(data["bench press"]["category"], "upper body")
         self.assertListEqual(data["bench press"]["variation"], ["barbell", "dumbell"])
 
+    def test_exercise_class(self):
+        exer_obj = Exercise("bench press", ["barbell"], "upper body")
+        exer_obj.add_to_registry()
+
+        self.assertIn(exer_obj.exerciseID, Exercise.registiry)
+        self.assertEqual(exer_obj, Exercise.get(exer_obj.exerciseID))
+        self.assertTrue(Exercise.exists(exer_obj.exerciseID))
+
+        obj = Exercise("bro press", ["Dumbell"], "upper body")
+        Exercise.add(obj)
+
+        self.assertIn(obj.exerciseID, Exercise.registiry)
+        self.assertEqual(obj, Exercise.get(obj.exerciseID))
+
     def test_get_exercise_object(self):
         exercise_manager.add_exercise_type(exerciseID="Bench Press", category="Upper Body", variations=["Barbell", "Dumbell"])
         item_to_check = exercise_manager.get_exercise("Bench Press")

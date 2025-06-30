@@ -14,7 +14,8 @@ class Exercise():
         Exercise.registiry[self.exerciseID] = self  # adds a strong reference
 
     def add_to_registry(self) -> None:
-        """Adds a strong reference to self by adding it to a registry list"""
+        """Adds a strong reference to self by adding it to a registry list.
+        Syntatic sugar for Exercise.add()"""
         Exercise.add(self)
     
     def to_dict(self, flat=True) -> dict:
