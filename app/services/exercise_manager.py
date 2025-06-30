@@ -21,6 +21,7 @@ def add_exercise_type(exerciseID:str, variations:list[str], category:str) -> Non
     """
     
     exerciseObject = Exercise(exerciseID, variations, category)
+    Exercise.add(exerciseObject)  # add the exercise to the registry
 
     # Check if the file exists and read existing data
     storage_manager.ensure_file_exists(exercise_list_json_file_path, "{}")
@@ -40,7 +41,7 @@ def add_exercise_type(exerciseID:str, variations:list[str], category:str) -> Non
         file.write(json_object)
 
 # Return Dictionary of all exercises
-def load_exercise_list() -> list[Exercise]:
+def load_exercise_json_list() -> list[Exercise]:
     """Load all exercises from the exercise list JSON file."""
     with open(exercise_list_json_file_path, "r") as file:
         try:
@@ -50,17 +51,17 @@ def load_exercise_list() -> list[Exercise]:
     
     return [Exercise(exerciseID, value["variation"], value["category"]) for exerciseID, value in exercise_dict.items()]
 
-def get_exercise_object(object_to_get:str) -> Exercise:
-    """Checks if an type::Exercise exists in the JSON master list.
-    If exists returns that object"""
-    list_of_exercise = load_exercise_list()
+def get_exercise(object_to_get:str) -> Exercise:
+    """Checks if an type::Exercise exists in the registry or JSON master list.
+    If exists returns that object
+    Args:
+        object_to_get (str): The name or ID of the exercise to retrieve.
+    Returns:
+        object (Exercise): The Exercise object if found, otherwise an empty Exercise object.
+    """
     object_to_get = object_to_get.lower()
 
-    for item in list_of_exercise:
-        if (item.name == object_to_get) or (item.exerciseID == object_to_get):
-            return item
-    
-    return Exercise("", [], "")
+    return Exercise.get(object_to_get)  # Check if it exists in the registry
     
 def log_exercise(exerciseObject:Exercise, setMap:SetMap) -> None:
     conn = sqlite3.connect(exercise_log_database_file_path)

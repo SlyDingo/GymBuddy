@@ -54,7 +54,7 @@ class TestExerciseManager(unittest.TestCase):
 
     def test_get_exercise_object(self):
         exercise_manager.add_exercise_type(exerciseID="Bench Press", category="Upper Body", variations=["Barbell", "Dumbell"])
-        item_to_check = exercise_manager.get_exercise_object("Bench Press")
+        item_to_check = exercise_manager.get_exercise("Bench Press")
         self.assertEqual(item_to_check.exerciseID, "bench press")
         self.assertEqual(item_to_check.category, "upper body")
         self.assertEqual(item_to_check.variation, ["barbell", "dumbell"])
