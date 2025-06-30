@@ -52,6 +52,7 @@ class TestExerciseManager(unittest.TestCase):
         self.assertEqual(data["bench press"]["category"], "upper body")
         self.assertListEqual(data["bench press"]["variation"], ["barbell", "dumbell"])
 
+    # Exercise Class
     def test_exercise_class(self):
         exer_obj = Exercise("bench press", ["barbell"], "upper body")
         exer_obj.add_to_registry()
@@ -73,6 +74,7 @@ class TestExerciseManager(unittest.TestCase):
         self.assertEqual(item_to_check.category, "upper body")
         self.assertEqual(item_to_check.variation, ["barbell", "dumbell"])
     
+    # Database
     def test_logging_exercise_into_database(self):
         storage_manager.init_db("Exercise", exercise_manager.exercise_log_database_file_path)
         exerciseObject = Exercise("bench press", ["barbell"], "upper body")
