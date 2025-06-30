@@ -85,21 +85,24 @@ class SetMap():
     set_map = []
     total_sets = 0;
 
-    def __init__(self) -> None:
-        pass
-
     def add_set(self, rep_count:int, weight:float, is_warmup=0) -> None:
         new_set = Set(rep_count, weight, is_warmup)
         self.set_map.append(new_set)
         self.total_sets += 1
 
 class ExerciseLog(SetMap):
-    def __init__(self, exerciseID:str, variation:str, category:str) -> None:
-        super().__init__()
+    def __init__(self, exerciseID:str, variation:str) -> None:
+        # super().__init__()
         self.exerciseID = exerciseID.lower()
         self.variation = variation
-        self.category = category
 
         # Check if Exercise exists in all existing Exercises
         if not Exercise.exists(self.exerciseID):
             raise ValueError("Exercie does not exist")
+        else:
+            self.exerciseType = Exercise.get(self.exerciseID)
+        
+        if self.variation not in self.exerciseType.variation:
+            raise ValueError(f"Variation '{self.variation}' does not exist for exercise '{self.exerciseID}'")
+        
+        
