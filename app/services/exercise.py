@@ -73,6 +73,13 @@ class Exercise():
     # def add(cls, exercise) -> None:
     #     cls.registiry[exercise.exerciseID] = exercise
 
+class Set():
+    """Object for each Set for the setmap"""
+    def __init__(self, reps:int, weight:float, is_warmup:int) -> None:
+        self.reps = reps
+        self.weight = weight
+        self.is_warmup = is_warmup
+
 class SetMap():
     """Store the Workout data for a specific workout"""
     set_map = []
@@ -82,12 +89,8 @@ class SetMap():
         pass
 
     def add_set(self, rep_count:int, weight:float, is_warmup=0) -> None:
-        self.set_map.append({
-            "rep": rep_count,
-            "weight": weight,
-            "is_warmup": is_warmup
-        })
-
+        new_set = Set(rep_count, weight, is_warmup)
+        self.set_map.append(new_set)
         self.total_sets += 1
 
 class ExerciseLog(SetMap):

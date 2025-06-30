@@ -10,6 +10,8 @@ from storage import storage_manager
 from services.exercise import Exercise, SetMap
 
 join_path = os.path.join
+
+#TODO add unit test for SetMap
 class TestExerciseManager(unittest.TestCase):
     def setUp(self):
         # Create a temporty directory for our unit tets
