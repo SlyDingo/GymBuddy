@@ -1,5 +1,6 @@
 #TODO
 # add __Str__ method to Exercise class
+import timings
 
 class Exercise():
     registiry = {} # Tracks all instances of the exercise
@@ -91,10 +92,13 @@ class SetMap():
         self.total_sets += 1
 
 class ExerciseLog(SetMap):
-    def __init__(self, exerciseID:str, variation:str) -> None:
+    def __init__(self, exerciseID:str, variation:str, time=0) -> None:
         # super().__init__()
         self.exerciseID = exerciseID.lower()
         self.variation = variation
+
+        if time == 0:
+            self.date_unix = timings.epoch_now()
 
         # Check if Exercise exists in all existing Exercises
         if not Exercise.exists(self.exerciseID):
