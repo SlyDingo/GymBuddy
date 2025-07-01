@@ -99,6 +99,8 @@ class ExerciseLog(SetMap):
 
         if time == 0:
             self.date_unix = timings.epoch_now()
+        else:
+            self.date_unix = int(time)
 
         # Check if Exercise exists in all existing Exercises
         if not Exercise.exists(self.exerciseID):
