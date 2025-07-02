@@ -63,14 +63,21 @@ def get_exercise(object_to_get:str) -> Exercise:
 
     return Exercise.get(object_to_get)  # Check if it exists in the registry
     
-def log_exercise(exerciseObject:Exercise, setMap:SetMap) -> None:
+def log_exercise(obj:ExerciseLog) -> None:
     conn = sqlite3.connect(exercise_log_database_file_path)
     cursor = conn.cursor()
 
+    value = {
+        "id" : obj.exerciseID,
+        "cat" : obj.category,
+        "var" : obj.variation,
+        "unix" : obj.date_unix
+    }
+
     cursor.execute("""
     INSERT INTO exercise_log (exercise_id, category, variation, date_unix)
-    VALUES (?, ?, ?, ?)
-    """, (exerciseObject.exerciseID, exerciseObject.category, exerciseObject.variation[0], 123))
+    VALUES (:id, :cat, :var, :unix)
+    """, value)
 
     conn.commit()
     conn.close()

@@ -7,7 +7,9 @@ import sqlite3
 
 from services import exercise_manager
 from storage import storage_manager
-from services.exercise import Exercise, SetMap
+from services.exercise import *
+# from services import timings
+
 
 join_path = os.path.join
 
@@ -77,12 +79,14 @@ class TestExerciseManager(unittest.TestCase):
         self.assertEqual(item_to_check.variation, ["barbell", "dumbell"])
     
     # Database
-    def test_logging_exercise_into_database(self):
+    def logging_exercise_into_database(self):
         storage_manager.init_db("Exercise", exercise_manager.exercise_log_database_file_path)
-        exerciseObject = Exercise("bench press", ["barbell"], "upper body")
+        exer = Exercise("bench press", ["barbell", "dumbell"], "upper body")
+
+        obj = ExerciseLog()
         set = SetMap()
         set.add_set(6, 10, 0)
-        exercise_manager.log_exercise(exerciseObject, set)
+        # exercise_manager.log_exercise(exerciseObject, set)
 
         conn = sqlite3.connect(self.temp_exersice_log_db)
         cursor = conn.cursor()

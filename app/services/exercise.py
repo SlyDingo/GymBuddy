@@ -1,6 +1,7 @@
 #TODO
 # add __Str__ method to Exercise class
-import timings
+
+from . import timings
 
 class Exercise():
     registiry = {} # Tracks all instances of the exercise
@@ -110,5 +111,7 @@ class ExerciseLog(SetMap):
         
         if self.variation not in self.exerciseType.variation:
             raise ValueError(f"Variation '{self.variation}' does not exist for exercise '{self.exerciseID}'")
+        
+        self.category = self.exerciseType.category
         
         
